@@ -25,8 +25,13 @@ define([
                 if(!this.plotData) this.plotData = [];
                 this.plotOptions = {
                     crosshair: {
-                    mode: "x"
+                        mode: "x"
                     },
+                    series: {
+                        lines: { show: true },
+                        points: { show: true }
+                    },
+                    grid: { hoverable: true, clickable: true },
                     yaxis: { max: 1 },
                     xaxis: {
                         mode: "time",
@@ -119,6 +124,21 @@ define([
                 console.log('reset()');
             },
 
+            plothover: function (event, pos, item) {
+            },
+
+            plotclick: function (event, pos, item) {
+                var date = new Date(pos.x);
+                var curr_date = date.getDate();
+                var curr_month = date.getMonth() + 1; //Months are zero based
+                var curr_year = date.getFullYear();
+                this.options.parameters.begindate = curr_year + "-" + this.pad2(curr_month) + "-" + this.pad2(curr_date);
+                this.options.parameters.pagenumber = 1;
+                if(this.options.parameters.enddate) delete this.options.parameters.enddate;
+                var endpoint = '#newsList?' + $.param(this.options.parameters);
+                Backbone.history.navigate(endpoint,true);
+            },
+
             render : function () {
                 $('#main-container').parent().prepend(this.$el.html(this.template()));
                 this.plotData = _.sortBy(this.plotData, function(plotTick) { return plotTick[0]});
@@ -126,6 +146,9 @@ define([
                 this.minDateObj = new Date(this.plotData[0][0]);
                 this.plotObj = $.plot($('#flot-canvas'),[this.plotData],this.plotOptions);
                 this.plotObj.lockCrosshair();
+                var self = this;
+                $('#flot-canvas').bind("plothover", function (event, pos, item) { self.plothover(event, pos, item) });
+                $('#flot-canvas').bind("plotclick", function (event, pos, item) { self.plotclick(event, pos, item) });
                 this.checkScroll();
                 return this;
             },
