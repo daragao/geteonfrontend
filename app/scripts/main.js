@@ -33,12 +33,17 @@ require.config({
         },
         'jquery.flot.crosshair': {
             deps: ['jquery.flot']
+        },
+        localStorage: {
+            deps: ['backbone'],
+            exports: 'Backbone.LocalStorage'
         }
 
     },
     paths: {
         jquery: '../bower_components/jquery/jquery',
         backbone: '../bower_components/backbone/backbone',
+        localStorage: '../bower_components/backbone.localStorage/backbone.localStorage',
         underscore: '../bower_components/underscore/underscore',
         bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
         'jquery.flot': '../bower_components/flot/jquery.flot',

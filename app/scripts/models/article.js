@@ -8,14 +8,18 @@ define([
 
         var ArticleModel = Backbone.Model.extend({
 
+
+            url: 'http://newsline-php.ap01.aws.af.cm/newsline1/piecesofnews/',
+            //url: 'http://localhost/newsline1/piecesofnews/',
+
             defaults: {
             },
 
             initialize: function(options){
-                //this.url = 'http://newsline-php.ap01.aws.af.cm/newsline1/piecesofnews/' +
-                this.url = 'http://localhost/newsline1/piecesofnews/' +
-                options.id;
+                this.url += options.id;
             }
+
+
         });
 
         return ArticleModel;

@@ -44,7 +44,7 @@ define([
             },
 
             nextPage: function () {
-                this.options.parameters.pagenumber++;
+                if(this.canFetch) this.options.parameters.pagenumber++;
                 this.fetchCollection();
             },
 
