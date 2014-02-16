@@ -17,13 +17,14 @@ define([
 
             initialize: function () {
                 this.listenTo(this.model, 'destroy', this.remove);
-                $(this.el).attr('href','#article/'+this.model.id);
-                $(this.el).attr('id',this.model.id);
+                this.$el.attr('href','#article/'+this.model.id);
+                this.$el.attr('id',this.model.id);
                 this.render();
             },
 
             render: function () {
                 $('#news-list').append(this.$el.html(this.template(this.model.toJSON())));
+                this.delegateEvents();
                 return this;
             },
 

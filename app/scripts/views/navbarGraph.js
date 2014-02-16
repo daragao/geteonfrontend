@@ -109,7 +109,8 @@ define([
                 this.close();
                 this.initialize();
                 this.collection.each(this.addOne,this);
-                this.render();
+                if(this.collection.length)
+                    this.render();
             },
 
             addOne: function(timeseriesModel) {
@@ -143,7 +144,7 @@ define([
                 $('#main-container').parent().prepend(this.$el.html(this.template()));
                 this.plotData = _.sortBy(this.plotData, function(plotTick) { return plotTick[0]});
                 this.plotOptions.yaxis.max = _.max(this.plotData,function(value){return value[1];})[1];
-                if(this.plotData)
+                if(this.plotData && this.plotData.length != 0)
                     this.minDateObj = new Date(this.plotData[0][0]);
                 this.plotObj = $.plot($('#flot-canvas'),[this.plotData],this.plotOptions);
                 this.plotObj.lockCrosshair();

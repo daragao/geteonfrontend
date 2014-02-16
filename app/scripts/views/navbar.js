@@ -21,7 +21,13 @@ define([
             },
 
             events: {
-                'submit form': 'submitSearch'
+                'submit form': 'submitSearch',
+                'click #backBot': 'goBack'
+            },
+
+            goBack: function (event) {
+                event.preventDefault();
+                history.go(-1);
             },
 
             submitSearch: function() {

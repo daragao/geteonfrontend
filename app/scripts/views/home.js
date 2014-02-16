@@ -11,10 +11,11 @@ define([
         var HomeView = Backbone.View.extend({
             template: JST['app/scripts/templates/home.ejs'],
 
-            className: 'row-fluid',
+            className: 'container',
 
             events: {
-                'submit form': 'submitSearch'
+                'submit form': 'submitSearch',
+                'click #searchbot': 'submitSearch'
             },
 
             submitSearch: function() {

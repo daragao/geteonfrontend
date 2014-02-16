@@ -11,6 +11,7 @@ define([
                 '_id':{
                     '$id': 0
                 },
+                'mainsourcename': '',
                 'title':'',
                 'pubdate':'2013-01-01 00:00:00',
                 'idsource':0,

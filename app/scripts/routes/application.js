@@ -39,10 +39,12 @@ define([
                     this.lastArticleModel.fetch();
                     this.loadView(new ArticleView({model:this.lastArticleModel}));
                 }
-
             },
 
             newsList: function(querystring) {
+                if(!this.navbarView){
+                    this.navbarView = new NavbarView();
+                }
                 var resetData = (querystring != this.lastQueryString);
                 this.lastQueryString = querystring;
 
@@ -60,20 +62,23 @@ define([
                         graphTimeseriesCollection: this.graphTimeseriesCollection
                     })
                 }
+                //this view needs to be rendered before the collections
                 this.loadView(this.newsListView);
                 if(!resetData) {
                     this.newsListView.addAll();
                     this.newsListView.navbarGrapView.addAll();
-                 } else {
+                } else {
                     this.newsListView.fetchCollection();
-                    if(this.newsListView.navbarGrapView)
+                    if(this.newsListView.navbarGrapView) {
                         this.newsListView.navbarGrapView.fetchCollection();
+                    }
                 }
             },
 
             loadView : function(view) {
                 this.view && (this.view.close ? this.view.close() : this.view.remove());
                 this.view = view;
+                this.view.render();
             },
 
             parseQueryString: function(queryString){

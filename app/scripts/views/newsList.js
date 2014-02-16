@@ -15,7 +15,7 @@ define([
 
             id: 'news-list-container',
 
-            className: 'container-fluid',
+            className: 'container',
 
             initialize: function() {
                 this.listenTo(this.collection, 'add', this.addOne);
@@ -27,7 +27,6 @@ define([
                 var self = this;
                 self.canFetch = true;
                 this.childViews = new Array();
-                this.render();
             },
 
             fetchCollection: function() {
@@ -62,7 +61,7 @@ define([
             },
 
             addAll: function () {
-                this.close();
+                //this.close();
                 this.initialize();
                 this.collection.each(this.addOne,this);
             },
@@ -75,6 +74,7 @@ define([
                         collection:this.options.graphTimeseriesCollection
                     });
                 }
+                this.delegateEvents();
                 return this;
             },
 
