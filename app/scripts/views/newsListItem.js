@@ -23,7 +23,7 @@ define([
             },
 
             render: function () {
-                $('#news-list').append(this.$el.html(this.template(this.model.toJSON())));
+                $('#'+this.options.elemName).append(this.$el.html(this.template(this.model.toJSON())));
                 this.delegateEvents();
                 return this;
             },

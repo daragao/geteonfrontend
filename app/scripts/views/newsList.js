@@ -55,8 +55,41 @@ define([
                 }
             },
 
+            writeDate: function (mydate) {
+                var year=mydate.getFullYear()
+                var day=mydate.getDay()
+                var month=mydate.getMonth()
+                var daym=mydate.getDate()
+                //if the current date is less than 10, pad it.
+                if (daym<10)
+                    daym="0"+daym
+                var dayarray=new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
+                var montharray=new Array("January","February","March","April","May","June","July","August","September","October","November","December")
+                //write out the final results
+                return dayarray[day]+", "+montharray[month]+" "+daym+", "+year;
+            },
+
             addOne: function (newsItem) {
-                var view = new NewsListItemView({ model: newsItem });
+                //create date and element id
+                var pubdate = newsItem.get('pubdate');
+                var myDate = new Date(pubdate);
+                var dateStr = (myDate.getMonth() + 1) + "-" +
+                    myDate.getDate() + "-" +
+                    myDate.getFullYear();
+                var elemName = 'news-list-' + dateStr;
+                var dateOut = this.writeDate(myDate);
+                if($('#'+elemName).length == 0){
+                    this.$el.append(this.template({
+                        elemId: elemName,
+                        articlesDate: dateOut
+                    }));
+                    $('#main-container').append(this.$el);
+                }
+                //render newslistitem
+                var view = new NewsListItemView({
+                    elemName: elemName,
+                    model: newsItem
+                });
                 this.childViews.push(view);
             },
 
@@ -67,7 +100,6 @@ define([
             },
 
             render : function () {
-                $('#main-container').append(this.$el.html(this.template()));
                 if(!this.navbarGrapView){
                     this.navbarGrapView = new NavbarGraphView({
                         parameters:_.clone(this.options.parameters),

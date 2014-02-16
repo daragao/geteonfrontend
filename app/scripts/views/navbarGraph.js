@@ -55,7 +55,10 @@ define([
                             //$(this).addClass("active");
                             // this should get the date from the model not the
                             // element. todo after adding localstorage
-                            scrollDate = new Date($(this.getElementsByTagName('p')).text());
+                            var dataElem = this.getElementsByClassName('article-date');
+                            if(dataElem.length > 0)
+                            var dateStr = dataElem[0].value;
+                            scrollDate = new Date(dateStr);
                             return false;
                         }
                     });

@@ -11,7 +11,7 @@ define([
         var ArticleView = Backbone.View.extend({
             template: JST['app/scripts/templates/article.ejs'],
 
-            className: 'row-fluid col-md-8 col-md-offset-2',
+            className: 'container',
 
             initialize: function () {
                 this.listenTo(this.model, 'change', this.render);
