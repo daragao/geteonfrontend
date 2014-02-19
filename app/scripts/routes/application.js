@@ -15,6 +15,7 @@ define([
         'use strict';
 
         var ApplicationRouter = Backbone.Router.extend({
+
             routes: {
                 '':'home',
                 'newsList?*querystring':'newsList',
@@ -22,38 +23,42 @@ define([
                 'article/:id': 'article'
             },
 
-            home: function() {
-                if(this.navbarView){
-                    this.navbarView.close();
-                    this.navbarView = undefined;
+            initialize: function() {
+                this.on('route',this.afterAllRoute);
+            },
+
+            afterAllRoute: function(routeName) {
+                if(routeName === 'home'){
+                    if(this.navbarView){
+                        this.navbarView.close();
+                        delete this.navbarView;
+                    }
                 }
+                else {
+                    if(!this.navbarView){
+                        this.navbarView = new NavbarView();
+                    }
+                }
+            },
+
+            home: function() {
                 this.loadView(new HomeView());
             },
 
             article: function(id){
-                if(!this.navbarView){
-                    this.navbarView = new NavbarView();
-                }
                 this.lastArticleModel = new ArticleModel({'id': id});
                 if(id){
-                    this.lastArticleModel.fetch();
                     this.loadView(new ArticleView({model:this.lastArticleModel}));
                 }
             },
 
             newsList: function(querystring) {
-                if(!this.navbarView){
-                    this.navbarView = new NavbarView();
-                }
-                var resetData = (querystring != this.lastQueryString);
-                this.lastQueryString = querystring;
+                var newQuery = (querystring != this.lastNewsListQueryString);
+                this.lastNewsListQueryString = querystring;
 
-                if(resetData){
+                if(newQuery){
                     var query = this.parseQueryString(querystring);
                     query.pagenumber = 1;
-                    if(!this.navbarView){
-                        this.navbarView = new NavbarView();
-                    }
                     this.newsListCollection = new NewsListCollection();
                     this.graphTimeseriesCollection = new GraphTimeseriesCollection();
                     this.newsListView = new NewsListView({
@@ -64,7 +69,7 @@ define([
                 }
                 //this view needs to be rendered before the collections
                 this.loadView(this.newsListView);
-                if(!resetData) {
+                if(!newQuery) {
                     this.newsListView.addAll();
                     this.newsListView.navbarGrapView.addAll();
                 } else {

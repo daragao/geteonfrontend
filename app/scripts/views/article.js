@@ -14,12 +14,13 @@ define([
             className: 'container',
 
             initialize: function () {
+                this.listenTo(this.model, 'add', this.render);
                 this.listenTo(this.model, 'change', this.render);
                 this.listenTo(this.model, 'destroy', this.remove);
-            },
 
-            change: function () {
-                this.render();
+                if(this.model){
+                    this.model.fetch();
+                }
             },
 
             render: function () {

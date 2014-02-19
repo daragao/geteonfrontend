@@ -19,7 +19,16 @@ define([
                 this.listenTo(this.model, 'destroy', this.remove);
                 this.$el.attr('href','#article/'+this.model.id);
                 this.$el.attr('id',this.model.id);
+                var thisDate = new Date(this.model.get('pubdate'));
+                var prettyHour = this.pad2(thisDate.getHours()) +
+                    ':' + this.pad2(thisDate.getMinutes()) +
+                    ':' + this.pad2(thisDate.getSeconds());
+                this.model.set('prettyHour', prettyHour);
                 this.render();
+            },
+
+            pad2: function (number) {
+                return (number < 10 ? '0' : '') + number;
             },
 
             render: function () {

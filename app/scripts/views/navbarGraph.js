@@ -40,6 +40,7 @@ define([
                 };
 
                 this.canFetch = true;
+                $('#main-container').parent().prepend(this.$el.html(this.template()));
             },
 
             checkScroll: function() {
@@ -48,7 +49,7 @@ define([
 
                     var scrollTop = $(window).scrollTop();
                     var windowHeight = $(window).height();
-                    $(".newsListItem").removeClass("active");
+                    //$(".newsListItem").removeClass("active");
                     $(".newsListItem").each( function() {
                         var offset = $(this).offset();
                         if (scrollTop <= offset.top && ($(this).height() + offset.top) < (scrollTop + windowHeight)) {
@@ -88,6 +89,7 @@ define([
                     this.canFetch = false;
                     var self = this;
                     this.collection.fetch({
+                        remove: false,
                         data: self.options.parameters,
                         success: function () {
                             self.canFetch = true;
@@ -112,8 +114,7 @@ define([
                 this.close();
                 this.initialize();
                 this.collection.each(this.addOne,this);
-                if(this.collection.length)
-                    this.render();
+                this.render();
             },
 
             addOne: function(timeseriesModel) {
@@ -144,7 +145,6 @@ define([
             },
 
             render : function () {
-                $('#main-container').parent().prepend(this.$el.html(this.template()));
                 this.plotData = _.sortBy(this.plotData, function(plotTick) { return plotTick[0]});
                 this.plotOptions.yaxis.max = _.max(this.plotData,function(value){return value[1];})[1];
                 if(this.plotData && this.plotData.length != 0)
