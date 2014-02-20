@@ -56,23 +56,6 @@ define([
                 }
             },
 
-            writeDate: function (mydate) {
-                var year=mydate.getFullYear()
-                var day=mydate.getDay()
-                var month=mydate.getMonth()
-                var daym=mydate.getDate()
-                //if the current date is less than 10, pad it.
-                if (daym<10)
-                    daym="0"+daym
-                var dayarray=new Array("Sunday","Monday","Tuesday","Wednesday",
-                "Thursday","Friday","Saturday");
-                var montharray=new Array("January","February","March","April",
-                    "May","June","July","August","September","October",
-                "November","December");
-                //write out the final results
-                return dayarray[day]+", "+montharray[month]+" "+daym+", "+year;
-            },
-
             addOne: function (newsItem) {
             console.log('addOne!');
                 //create date and element id

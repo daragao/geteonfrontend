@@ -55,7 +55,8 @@ require.config({
 
 require([
     'backbone',
-    'routes/application'
+    'routes/application',
+    'views/viewsHelper' // doesn't need to be added as an argument
     ], function (Backbone, ApplicationRouter) {
         var routerApp = new ApplicationRouter();
         Backbone.history.start();

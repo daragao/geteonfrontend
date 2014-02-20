@@ -27,10 +27,6 @@ define([
                 this.render();
             },
 
-            pad2: function (number) {
-                return (number < 10 ? '0' : '') + number;
-            },
-
             render: function () {
                 $('#'+this.options.elemName).append(this.$el.html(this.template(this.model.toJSON())));
                 this.delegateEvents();

@@ -73,10 +73,6 @@ define([
                 }
             },
 
-            pad2: function (number) {
-                return (number < 10 ? '0' : '') + number;
-            },
-
             fetchCollection: function() {
                 if(this.canFetch) {
                     if(this.options.parameters.begindate){
@@ -134,6 +130,7 @@ define([
 
             plotclick: function (event, pos, item) {
                 var date = new Date(pos.x);
+                date.setDate(date.getDate()+1); // because of the API
                 var curr_date = date.getDate();
                 var curr_month = date.getMonth() + 1; //Months are zero based
                 var curr_year = date.getFullYear();
@@ -156,20 +153,6 @@ define([
                 $('#flot-canvas').bind("plotclick", function (event, pos, item) { self.plotclick(event, pos, item) });
                 this.checkScroll();
                 return this;
-            },
-
-            close: function() {
-
-                //COMPLETELY UNBIND THE VIEW
-                this.undelegateEvents();
-                this.unbind();
-
-                this.$el.removeData().unbind();
-
-                //Remove view from DOM
-                this.remove();
-                Backbone.View.prototype.remove.call(this);
-
             }
         });
 
