@@ -76,10 +76,13 @@ define([
             fetchCollection: function() {
                 if(this.canFetch) {
                     if(this.options.parameters.begindate){
+
+                        var date = this.mongoDate2JsDate(this.options.parameters.begindate);
+                        date.setDate(date.getDate()+1); // because of the API
                         // had to do this because andre said fuck you!
                         // i'm going to name the parameters oposite names just to
                         // screw  with your head!
-                        this.options.parameters.enddate = this.options.parameters.begindate;
+                        this.options.parameters.enddate = this.date2urlDateStr(date);
                         delete this.options.parameters.begindate;
                     }
                     this.canFetch = false;
@@ -130,11 +133,9 @@ define([
 
             plotclick: function (event, pos, item) {
                 var date = new Date(pos.x);
-                date.setDate(date.getDate()+1); // because of the API
-                var curr_date = date.getDate();
-                var curr_month = date.getMonth() + 1; //Months are zero based
-                var curr_year = date.getFullYear();
-                this.options.parameters.begindate = curr_year + "-" + this.pad2(curr_month) + "-" + this.pad2(curr_date);
+                date.setDate(date.getDate()+2); // because of the API
+                var dateStr = this.date2urlDateStr(date);
+                this.options.parameters.begindate = dateStr;
                 this.options.parameters.pagenumber = 1;
                 if(this.options.parameters.enddate) delete this.options.parameters.enddate;
                 var endpoint = '#newsList?' + $.param(this.options.parameters);

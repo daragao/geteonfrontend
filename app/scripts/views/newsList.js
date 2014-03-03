@@ -17,6 +17,17 @@ define([
 
             className: 'container',
 
+            spinnerOpts: {
+                lines: 9, // The number of lines to draw
+                length: 6, // The length of each line
+                width: 2, // The line thickness
+                radius: 3, // The radius of the inner circle
+                speed: 0.9, // Rounds per second
+                trail: 43, // Afterglow percentage
+                className: 'spinner', // The CSS class to assign to the spinner
+                zIndex: 0 // The z-index (defaults to 2000000000)
+            },
+
             initialize: function() {
                 var self = this;
                 this.listenTo(this.collection, 'add', this.addOne);
@@ -31,6 +42,8 @@ define([
 
             fetchCollection: function() {
                 if(this.canFetch) {
+                    this.$el.append('<div class="alert alert-info"><div id="spinnerDiv"></div></div>');
+                    this.$el.find('#spinnerDiv').spin(this.spinnerOpts);
                     this.canFetch = false;
                     var self = this;
                     this.collection.fetch({
@@ -38,6 +51,10 @@ define([
                         data: self.options.parameters,
                         success: function () {
                             self.canFetch = true;
+                            self.$el.find('#spinnerDiv').parent().remove();
+                        },
+                        error: function () {
+                            self.$el.find('#spinnerDiv').parent().remove();
                         }
                     });
                 }
@@ -60,10 +77,8 @@ define([
             console.log('addOne!');
                 //create date and element id
                 var pubdate = newsItem.get('pubdate');
-                var myDate = new Date(pubdate);
-                var dateStr = (myDate.getMonth() + 1) + "-" +
-                    myDate.getDate() + "-" +
-                    myDate.getFullYear();
+                var myDate = this.mongoDate2JsDate(pubdate);
+                var dateStr = this.date2urlDateStr(myDate);
                 var elemName = 'news-list-' + dateStr;
                 var dateOut = this.writeDate(myDate);
                 if($('#'+elemName).length == 0){

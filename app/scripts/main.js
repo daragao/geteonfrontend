@@ -12,6 +12,7 @@ require.config({
                 'jquery.flot.selection',
                 'jquery.flot.crosshair',
                 'jquery.flot.time',
+                'jquery.spin',
                 'underscore',
                 'jquery'
             ],
@@ -34,22 +35,21 @@ require.config({
         'jquery.flot.crosshair': {
             deps: ['jquery.flot']
         },
-        localStorage: {
-            deps: ['backbone'],
-            exports: 'Backbone.LocalStorage'
+        'jquery.spin': {
+            deps: ['jquery', 'spin']
         }
-
     },
     paths: {
         jquery: '../bower_components/jquery/jquery',
         backbone: '../bower_components/backbone/backbone',
-        localStorage: '../bower_components/backbone.localStorage/backbone.localStorage',
         underscore: '../bower_components/underscore/underscore',
         bootstrap: '../bower_components/sass-bootstrap/dist/js/bootstrap',
         'jquery.flot': '../bower_components/flot/jquery.flot',
         'jquery.flot.selection': '../bower_components/flot/jquery.flot.selection',
         'jquery.flot.crosshair': '../bower_components/flot/jquery.flot.crosshair',
-        'jquery.flot.time': '../bower_components/flot/jquery.flot.time'
+        'jquery.flot.time': '../bower_components/flot/jquery.flot.time',
+        'jquery.spin': '../bower_components/spin.js/jquery.spin',
+        'spin': '../bower_components/spin.js/spin'
     }
 });
 

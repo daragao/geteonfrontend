@@ -38,6 +38,8 @@ define([
                     if(!this.navbarView){
                         this.navbarView = new NavbarView();
                     }
+                    var searchInput = this.parseQueryString(this.lastNewsListQueryString);
+                    this.navbarView.setSearchInput(searchInput.search);
                 }
             },
 

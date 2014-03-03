@@ -24,6 +24,10 @@ define([
             },
 
             render: function () {
+                var pubdate = this.model.get('pubdate');
+                var myDate = new Date(pubdate);
+                var prettydate = this.writeDate(myDate);
+                this.model.set('prettydate',prettydate);
                 $('#main-container').append(this.$el.html(this.template(this.model.toJSON())));
                 return this;
             },
