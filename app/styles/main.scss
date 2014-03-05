@@ -25,6 +25,37 @@ body {
     margin-right:12px;
 }
 
+/* center search box */
+.block {
+  text-align: center;
+  margin: 20px;
+}
+
+.block:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+ }
+
+.centered {
+  display: inline-block;
+  vertical-align: middle;
+  width: 300px;
+  padding: 10px 15px;
+ }
+/* center search box END */
+
+
+
+
+
+
+
+
+
+
 @media ( max-width : 767px) {
     .navbar-fixed-top {
         position: relative;
