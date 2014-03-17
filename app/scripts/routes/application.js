@@ -9,9 +9,12 @@ define([
     'models/article',
     'views/article',
     'collections/graphTimeseries',
-    'views/navbar'
+    'views/navbar',
+    'views/register',
+    'views/login'
     ], function ($, Backbone, HomeView, NewsListView, NewsListCollection,
-    ArticleModel, ArticleView, GraphTimeseriesCollection, NavbarView) {
+    ArticleModel, ArticleView, GraphTimeseriesCollection, NavbarView,
+    RegisterView, LoginView) {
         'use strict';
 
         var ApplicationRouter = Backbone.Router.extend({
@@ -20,6 +23,8 @@ define([
                 '':'home',
                 'newsList?*querystring':'newsList',
                 'newsList': 'newsList',
+                'login': 'login',
+                'register': 'register',
                 'article/:id': 'article'
             },
 
@@ -45,6 +50,14 @@ define([
 
             home: function() {
                 this.loadView(new HomeView());
+            },
+
+            login: function() {
+                this.loadView(new LoginView());
+            },
+
+            register: function() {
+                this.loadView(new RegisterView());
             },
 
             article: function(id){
