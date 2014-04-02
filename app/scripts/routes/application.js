@@ -11,10 +11,11 @@ define([
     'collections/graphTimeseries',
     'views/navbar',
     'views/register',
-    'views/login'
+    'views/login',
+    'models/user'
     ], function ($, Backbone, HomeView, NewsListView, NewsListCollection,
-    ArticleModel, ArticleView, GraphTimeseriesCollection, NavbarView,
-    RegisterView, LoginView) {
+        ArticleModel, ArticleView, GraphTimeseriesCollection, NavbarView,
+    RegisterView, LoginView, UserModel) {
         'use strict';
 
         var ApplicationRouter = Backbone.Router.extend({
@@ -29,6 +30,8 @@ define([
             },
 
             initialize: function() {
+                if(!this.sessionUser)
+                    this.sessionUser = new UserModel();
                 this.on('route',this.afterAllRoute);
             },
 
@@ -53,7 +56,8 @@ define([
             },
 
             login: function() {
-                this.loadView(new LoginView());
+                //this.sessionUser.getLoggedUser();
+                this.loadView(new LoginView({model:this.sessionUser}));
             },
 
             register: function() {

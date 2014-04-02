@@ -53,11 +53,27 @@ require.config({
     }
 });
 
+
 require([
+    'jquery',
     'backbone',
     'routes/application',
+    'models/user',
     'views/viewsHelper' // doesn't need to be added as an argument
-    ], function (Backbone, ApplicationRouter) {
+    ], function ($, Backbone, ApplicationRouter, UserModel) {
+
+        $.ajaxPrefilter("json script", function (options, originalOptions, jqXHR) {
+
+            // Your server goes below
+            if(options.url && options.url.indexOf("http://") == -1) {
+                //options.crossDomain = true;
+                options.xhrFields = {withCredentials:false};
+                //options.url = 'http://newsline-php.ap01.aws.af.cm' + options.url;
+                options.url = 'http://localhost' + options.url;
+            }
+
+        });
+
         var routerApp = new ApplicationRouter();
         Backbone.history.start();
     });

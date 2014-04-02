@@ -11,8 +11,7 @@ define([
 
             model: NewsListItemModel,
 
-            //url: 'http://localhost/newsline1/piecesofnews',
-            url: 'http://newsline-php.ap01.aws.af.cm/newsline1/piecesofnews',
+            url: '/newsline1/piecesofnews',
 
             initialize: function (options) {
             }
