@@ -15,19 +15,15 @@ define([
 
             className:'navbar navbar-inverse navbar-fixed-top',
 
-            initialize: function() {
+            initialize: function(options) {
+                this.sessionModel = options.sessionModel;
+                this.sessionModel.on('sessionRefresh', this.refreshSession, this)
                 this.childViews = new Array();
                 this.render();
             },
 
             events: {
-                'submit form': 'submitSearch',
-                'click #backBot': 'goBack'
-            },
-
-            goBack: function (event) {
-                event.preventDefault();
-                history.go(-1);
+                'submit form': 'submitSearch'
             },
 
             submitSearch: function() {
@@ -41,8 +37,18 @@ define([
             },
 
             render : function () {
-                $('#main-container').parent().prepend(this.$el.html(this.template()));
+                var tempRender = this.$el.html(this.template());
+                $('#main-container').parent().prepend(tempRender);
+                this.refreshSession();
                 return this;
+            },
+
+            refreshSession: function(a,b,c,d,e) {
+                if(this.sessionModel.isLoggedIn()){
+                    $('#login-btn').text(this.sessionModel.get('Username'));
+                } else {
+                    $('#login-btn').text('Login');
+                }
             },
 
             close: function() {

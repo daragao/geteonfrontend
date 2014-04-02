@@ -58,9 +58,8 @@ require([
     'jquery',
     'backbone',
     'routes/application',
-    'models/user',
     'views/viewsHelper' // doesn't need to be added as an argument
-    ], function ($, Backbone, ApplicationRouter, UserModel) {
+    ], function ($, Backbone, ApplicationRouter) {
 
         $.ajaxPrefilter("json script", function (options, originalOptions, jqXHR) {
 

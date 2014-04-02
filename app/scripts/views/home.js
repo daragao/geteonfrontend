@@ -23,13 +23,23 @@ define([
                 Backbone.history.navigate('newsList?search='+searchValue, true);
             },
 
-            initialize: function() {
+            initialize: function(options) {
+                this.sessionModel = options.sessionModel;
+                this.sessionModel.on('sessionRefresh', this.refreshSession, this)
                 this.render();
             },
 
             render : function () {
                 $('#main-container').append(this.$el.html(this.template()));
                 return this;
+            },
+
+            refreshSession: function(a,b,c,d,e) {
+                if(this.sessionModel.isLoggedIn()){
+                    $('#login-btn').text(this.sessionModel.get('Username'));
+                } else {
+                    $('#login-btn').text('Login');
+                }
             },
 
             close: function() {

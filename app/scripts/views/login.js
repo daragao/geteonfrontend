@@ -4,9 +4,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'templates',
-    'models/user'
-    ], function ($, _, Backbone, JST, UserModel) {
+    'templates'
+    ], function ($, _, Backbone, JST) {
         'use strict';
 
         var LoginView = Backbone.View.extend({
@@ -15,17 +14,13 @@ define([
 
             className: 'container',
 
-            //model: new UserModel(),
-
             events: {
                 "click #logout-user": "logoutUser",
                 "click #login-user": "loginUser"
             },
 
             initialize: function(){
-                this.loginButton = $("#login-user");
-                this.model.view = this;
-                this.model.on('sessionRefresh', this.render, this)
+                this.model.on('sessionRefresh', this.refreshSession, this)
             },
 
             logoutUser: function(e){
@@ -36,15 +31,24 @@ define([
                 this.model.set({
                     Username: $("#username").val(),
                     password: $("#password").val()
-                });
-                this.model.login();
+            });
+            this.model.login();
             },
 
             render: function () {
-                if(this.model.isLoggedIn())
-                    $('#main-container').append(this.$el.html(this.templateLogout()));
-                else
-                    $('#main-container').append(this.$el.html(this.template()));
+                var tempJoin = this.templateLogout() + this.template()
+                $('#main-container').append(this.$el.html(tempJoin));
+                this.refreshSession();
+            },
+
+            refreshSession: function() {
+                if(this.model.isLoggedIn()){
+                    $('#login-container').hide();
+                    $('#logout-container').show();
+                } else {
+                    $('#login-container').show();
+                    $('#logout-container').hide();
+                }
                 return this;
             }
         });

@@ -12,10 +12,10 @@ define([
     'views/navbar',
     'views/register',
     'views/login',
-    'models/user'
+    'models/session'
     ], function ($, Backbone, HomeView, NewsListView, NewsListCollection,
         ArticleModel, ArticleView, GraphTimeseriesCollection, NavbarView,
-    RegisterView, LoginView, UserModel) {
+    RegisterView, LoginView, SessionModel) {
         'use strict';
 
         var ApplicationRouter = Backbone.Router.extend({
@@ -31,11 +31,14 @@ define([
 
             initialize: function() {
                 if(!this.sessionUser)
-                    this.sessionUser = new UserModel();
-                this.on('route',this.afterAllRoute);
+                    this.sessionUser = new SessionModel();
+                    this.on('route',this.afterAllRoute);
             },
 
             afterAllRoute: function(routeName) {
+                if(!this.sessionUser)
+                    this.sessionUser = new SessionModel();
+                this.sessionUser.getLoggedUser();
                 if(routeName === 'home'){
                     if(this.navbarView){
                         this.navbarView.close();
@@ -44,7 +47,7 @@ define([
                 }
                 else {
                     if(!this.navbarView){
-                        this.navbarView = new NavbarView();
+                        this.navbarView = new NavbarView({ sessionModel: this.sessionUser});
                     }
                     var searchInput = this.parseQueryString(this.lastNewsListQueryString);
                     this.navbarView.setSearchInput(searchInput.search);
@@ -52,11 +55,10 @@ define([
             },
 
             home: function() {
-                this.loadView(new HomeView());
+                this.loadView(new HomeView({ sessionModel: this.sessionUser}));
             },
 
             login: function() {
-                //this.sessionUser.getLoggedUser();
                 this.loadView(new LoginView({model:this.sessionUser}));
             },
 
