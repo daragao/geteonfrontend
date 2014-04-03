@@ -60,15 +60,27 @@ require([
     'routes/application',
     'views/viewsHelper' // doesn't need to be added as an argument
     ], function ($, Backbone, ApplicationRouter) {
-
         $.ajaxPrefilter("json script", function (options, originalOptions, jqXHR) {
-
+            // GETEON BACKEND
+            //var urlBaseGeteonBackend = 'http://newsline-php.ap01.aws.af.cm';
+            var urlBaseGeteonBackend = 'http://localhost';
+            // go BACKEND
+            var urlBaseGoBackend = 'http://localhost:4000/api/v1';
+            var backendKeyword = '{GO-BACKEND}';
+            var fullAddress = 'http://';
+            var keywordIndex = options.url.indexOf(backendKeyword);
+            var fullAddressIndex = options.url.indexOf(fullAddress);
             // Your server goes below
-            if(options.url && options.url.indexOf("http://") == -1) {
-                //options.crossDomain = true;
+            options.crossDomain = true;
+            if(options.url &&
+                (keywordIndex == -1 && fullAddressIndex == -1)) {
                 options.xhrFields = {withCredentials:false};
-                //options.url = 'http://newsline-php.ap01.aws.af.cm' + options.url;
-                options.url = 'http://localhost' + options.url;
+                options.url = urlBaseGeteonBackend + options.url;
+            } else {
+                if(keywordIndex != -1){
+                    var endIndex = keywordIndex + backendKeyword.length;
+                    options.url = urlBaseGoBackend + options.url.substring(endIndex);
+                }
             }
 
         });

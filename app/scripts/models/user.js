@@ -14,7 +14,7 @@ define([
                 'Username':''
             },
 
-            urlRoot : 'http://localhost:4000/api/v1/users',
+            urlRoot: '{GO-BACKEND}/users',
 
             initialize: function(){
             },
