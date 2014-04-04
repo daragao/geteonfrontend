@@ -62,10 +62,11 @@ require([
     ], function ($, Backbone, ApplicationRouter) {
         $.ajaxPrefilter("json script", function (options, originalOptions, jqXHR) {
             // GETEON BACKEND
-            //var urlBaseGeteonBackend = 'http://newsline-php.ap01.aws.af.cm';
-            var urlBaseGeteonBackend = 'http://localhost';
+            var urlBaseGeteonBackend = 'http://newsline-php.ap01.aws.af.cm';
+            //var urlBaseGeteonBackend = 'http://localhost';
             // go BACKEND
-            var urlBaseGoBackend = 'http://localhost:4000/api/v1';
+            var urlBaseGoBackend = 'http://warm-brook-6217.herokuapp.com/api/v1';
+            //var urlBaseGoBackend = 'http://localhost:4000/api/v1';
             var backendKeyword = '{GO-BACKEND}';
             var fullAddress = 'http://';
             var keywordIndex = options.url.indexOf(backendKeyword);
