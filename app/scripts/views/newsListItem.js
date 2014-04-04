@@ -15,6 +15,10 @@ define([
 
             className:  'list-group-item newsListItem',
 
+            events: {
+                'click .bookmark':'bookmarkClicked'
+            },
+
             initialize: function () {
                 this.listenTo(this.model, 'destroy', this.remove);
                 this.$el.attr('href','#article/'+this.model.id);
@@ -25,6 +29,14 @@ define([
                     ':' + this.pad2(thisDate.getSeconds());
                 this.model.set('prettyHour', prettyHour);
                 this.render();
+            },
+
+            setUserFeatures: function(isLoggedIn) {
+                $('#' + this,model.id + '.bookmark').toggle(isLoggedIn);
+            },
+
+            bookmarkClicked: function(e) {
+                e.preventDefault();
             },
 
             render: function () {

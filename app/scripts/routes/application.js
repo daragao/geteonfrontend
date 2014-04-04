@@ -83,6 +83,7 @@ define([
                     this.newsListCollection = new NewsListCollection();
                     this.graphTimeseriesCollection = new GraphTimeseriesCollection();
                     this.newsListView = new NewsListView({
+                        sessionModel:this.sessionUser,
                         parameters:query,
                         collection: this.newsListCollection,
                         graphTimeseriesCollection: this.graphTimeseriesCollection

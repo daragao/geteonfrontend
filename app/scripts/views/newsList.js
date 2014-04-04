@@ -28,9 +28,13 @@ define([
                 zIndex: 0 // The z-index (defaults to 2000000000)
             },
 
-            initialize: function() {
+            initialize: function(options) {
                 var self = this;
                 this.listenTo(this.collection, 'add', this.addOne);
+
+                if(options) // if fails initialized was called to remake binds
+                    this.sessionModel = options.sessionModel;
+                this.sessionModel.on('sessionRefresh', this.refreshSession, this);
 
                 _.bindAll(this, 'checkScroll');
                 $(window).scroll(this.checkScroll);
@@ -38,6 +42,11 @@ define([
                 var self = this;
                 self.canFetch = true;
                 this.childViews = new Array();
+            },
+
+            refreshSession: function() {
+                var isLoggedIn = this.sessionModel.isLoggedIn();
+                $('.bookmark').toggle(isLoggedIn);
             },
 
             fetchCollection: function() {
@@ -94,6 +103,7 @@ define([
                     model: newsItem
                 });
                 this.childViews.push(view);
+                $('.bookmark').toggle(this.sessionModel.isLoggedIn());
             },
 
             addAll: function () {
@@ -111,6 +121,7 @@ define([
                     });
                 }
                 this.delegateEvents();
+                this.refreshSession();
                 return this;
             },
 

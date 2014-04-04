@@ -1,77 +1,109 @@
 /*global define*/
 
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'templates'
-    ], function ($, _, Backbone, JST) {
-        'use strict';
+        'jquery',
+        'underscore',
+        'backbone',
+        'templates'
+        ], function ($, _, Backbone, JST) {
+            'use strict';
 
-        var NavbarView = Backbone.View.extend({
-            template: JST['app/scripts/templates/navbar.ejs'],
+            var NavbarView = Backbone.View.extend({
+                template: JST['app/scripts/templates/navbar.ejs'],
+                templateUserDropdown: JST['app/scripts/templates/navbar-user-dropdown.ejs'],
 
-            id: 'navbar',
+                id: 'navbar',
 
-            className:'navbar navbar-inverse navbar-fixed-top',
+                className:'navbar navbar-inverse navbar-fixed-top nav',
 
-            initialize: function(options) {
-                this.sessionModel = options.sessionModel;
-                this.sessionModel.on('sessionRefresh', this.refreshSession, this)
-                this.childViews = new Array();
-                this.render();
-            },
+                initialize: function(options) {
+                    this.sessionModel = options.sessionModel;
+                    this.sessionModel.on('sessionRefresh', this.refreshSession, this);
+                    this.childViews = new Array();
+                    this.render();
+                },
 
-            events: {
-                'submit form': 'submitSearch'
-            },
+                events: {
+                    'submit #search-navbar-form': 'submitSearch',
+                'click  #navbar-login-dropdown a': 'stopPropagation',
+                'submit #navbar-login-form':'loginUser',
+                'submit #navbar-logout-form':'logoutUser'
+                },
 
-            submitSearch: function() {
-                //$('#search_input').val();
-                var searchParams = $(event.target).serialize();
-                Backbone.history.navigate('newsList?'+searchParams, true);
-            },
+                logoutUser: function(e){
+                    this.sessionModel.logout();
+                    this.$('li .dropdown-menu').toggle();
+                },
 
-            setSearchInput: function (searchVal) {
-                $('input[name=search]').val(searchVal);
-            },
+                loginUser: function(e){
+                    var username = $("#navbar-login-dropdown #username").val();
+                    var password = $("#navbar-login-dropdown #password").val();
 
-            render : function () {
-                var tempRender = this.$el.html(this.template());
-                $('#main-container').parent().prepend(tempRender);
-                this.refreshSession();
-                return this;
-            },
+                    this.sessionModel.set({
+                        Username: username,
+                        password: password,
+                    });
+                    this.sessionModel.login();
+                    this.$('li .dropdown-menu').toggle();
+                },
 
-            refreshSession: function(a,b,c,d,e) {
-                if(this.sessionModel.isLoggedIn()){
-                    $('#login-btn').text(this.sessionModel.get('Username'));
-                } else {
-                    $('#login-btn').text('Login');
-                }
-            },
+                stopPropagation: function(e) {
+                    e.preventDefault();
+                    this.$('li .dropdown-menu').toggle();
+                },
 
-            close: function() {
+                submitSearch: function() {
+                    //$('#search_input').val();
+                    var searchParams = $(event.target).serialize();
+                    Backbone.history.navigate('newsList?'+searchParams, true);
+                },
 
-                //COMPLETELY UNBIND THE VIEW
-                this.undelegateEvents();
-                this.unbind();
+                setSearchInput: function (searchVal) {
+                    $('input[name=search]').val(searchVal);
+                },
 
-                this.$el.removeData().unbind();
+                render : function () {
+                    var tempRender = this.$el.html(this.template());
+                    var tempUserDropdown = this.templateUserDropdown();
+                    $('#main-container').parent().prepend(tempRender);
+                    $('#navbar-user-dropdown').html(tempUserDropdown);
+                    this.refreshSession();
+                    return this;
+                },
 
-                //Remove view from DOM
-                this.remove();
-                Backbone.View.prototype.remove.call(this);
+                refreshSession: function(a,b,c,d,e) {
+                    var username = 'Login'; //user not logged in
+                    var isLoggedIn = this.sessionModel.isLoggedIn();
 
-                // handle other unbinding needs, here
-                _.each(this.childViews, function(childView){
-                    if (childView.close){
-                        childView.close();
+                    $('#navbar-login-form').toggle(!isLoggedIn);
+                    $('#navbar-logout-form').toggle(isLoggedIn);
+                    if(this.sessionModel.isLoggedIn()){
+                        username = this.sessionModel.get('Username');
                     }
-                })
-                this.childViews = [];
-            }
-        });
+                    $('#login-btn').text(username);
+                },
 
-        return NavbarView;
-    });
+                close: function() {
+
+                    //COMPLETELY UNBIND THE VIEW
+                    this.undelegateEvents();
+                    this.unbind();
+
+                    this.$el.removeData().unbind();
+
+                    //Remove view from DOM
+                    this.remove();
+                    Backbone.View.prototype.remove.call(this);
+
+                    // handle other unbinding needs, here
+                    _.each(this.childViews, function(childView){
+                        if (childView.close){
+                            childView.close();
+                        }
+                    })
+                    this.childViews = [];
+                }
+            });
+
+            return NavbarView;
+        });

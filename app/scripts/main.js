@@ -60,13 +60,15 @@ require([
     'routes/application',
     'views/viewsHelper' // doesn't need to be added as an argument
     ], function ($, Backbone, ApplicationRouter) {
+        require(['bootstrap']);
+
         $.ajaxPrefilter("json script", function (options, originalOptions, jqXHR) {
             // GETEON BACKEND
-            var urlBaseGeteonBackend = 'http://newsline-php.ap01.aws.af.cm';
-            //var urlBaseGeteonBackend = 'http://localhost';
+            //var urlBaseGeteonBackend = 'http://newsline-php.ap01.aws.af.cm'; //remote
+            var urlBaseGeteonBackend = 'http://localhost'; //local
             // go BACKEND
-            var urlBaseGoBackend = 'http://warm-brook-6217.herokuapp.com/api/v1';
-            //var urlBaseGoBackend = 'http://localhost:4000/api/v1';
+            //var urlBaseGoBackend = 'http://warm-brook-6217.herokuapp.com/api/v1'; //remote
+            var urlBaseGoBackend = 'http://localhost:4000/api/v1'; //local
             var backendKeyword = '{GO-BACKEND}';
             var fullAddress = 'http://';
             var keywordIndex = options.url.indexOf(backendKeyword);
