@@ -262,8 +262,8 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     dot: true,
-                    //cwd: '<%= yeoman.app %>',
-                    cwd: 'heroku',
+                    cwd: '<%= yeoman.app %>',
+                    //cwd: 'heroku',
                     dest: '<%= yeoman.dist %>',
                     src: [
                         '*',
@@ -271,7 +271,8 @@ module.exports = function (grunt) {
                         '.htaccess',
                         'images/{,*/}*.{webp,gif}',
                         'styles/fonts/{,*/}*.*',
-                        'bower_components/sass-bootstrap/fonts/*.*'
+                        'bower_components/sass-bootstrap/fonts/*.*',
+                        'bower_components/sass-bootstrap/dist/js/bootstrap.js'
                     ],
                     rename: function (dest, src) {
                     var path = require('path');

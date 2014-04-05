@@ -32,7 +32,6 @@ define([
 
                 logoutUser: function(e){
                     this.sessionModel.logout();
-                    this.$('li .dropdown-menu').toggle();
                 },
 
                 loginUser: function(e){
@@ -44,7 +43,6 @@ define([
                         password: password,
                     });
                     this.sessionModel.login();
-                    this.$('li .dropdown-menu').toggle();
                 },
 
                 stopPropagation: function(e) {
@@ -81,6 +79,7 @@ define([
                         username = this.sessionModel.get('Username');
                     }
                     $('#login-btn').text(username);
+                    this.$('li .dropdown-menu').toggle(false);
                 },
 
                 close: function() {

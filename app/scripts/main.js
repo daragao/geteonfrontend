@@ -64,11 +64,11 @@ require([
 
         $.ajaxPrefilter("json script", function (options, originalOptions, jqXHR) {
             // GETEON BACKEND
-            //var urlBaseGeteonBackend = 'http://newsline-php.ap01.aws.af.cm'; //remote
-            var urlBaseGeteonBackend = 'http://localhost'; //local
+            var urlBaseGeteonBackend = 'http://newsline-php.ap01.aws.af.cm'; //remote
+            //var urlBaseGeteonBackend = 'http://localhost'; //local
             // go BACKEND
-            //var urlBaseGoBackend = 'http://warm-brook-6217.herokuapp.com/api/v1'; //remote
-            var urlBaseGoBackend = 'http://localhost:4000/api/v1'; //local
+            var urlBaseGoBackend = 'http://warm-brook-6217.herokuapp.com/api/v1'; //remote
+            //var urlBaseGoBackend = 'http://localhost:4000/api/v1'; //local
             var backendKeyword = '{GO-BACKEND}';
             var fullAddress = 'http://';
             var keywordIndex = options.url.indexOf(backendKeyword);
