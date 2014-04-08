@@ -12,7 +12,7 @@ define([
 
             //http://localhost/newsline1/timeseries?search=obama&enddate=2014-01-11
             //order array (last obj most recent value, enddate most recent date excluded)
-            url: '/newsline1/timeseries',
+            url: '/timeseries',
 
             initialize: function (options) {
             }

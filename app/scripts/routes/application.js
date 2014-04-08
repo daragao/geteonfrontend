@@ -32,7 +32,8 @@ define([
             initialize: function() {
                 if(!this.sessionUser)
                     this.sessionUser = new SessionModel();
-                    this.on('route',this.afterAllRoute);
+                this.sessionUser.getLoggedUser();
+                this.on('route',this.afterAllRoute);
             },
 
             afterAllRoute: function(routeName) {

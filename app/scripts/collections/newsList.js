@@ -11,7 +11,7 @@ define([
 
             model: NewsListItemModel,
 
-            url: '/newsline1/piecesofnews',
+            url: '/piecesofnews',
 
             initialize: function (options) {
             }

@@ -8,7 +8,7 @@ define([
 
         var ArticleModel = Backbone.Model.extend({
 
-            url: '/newsline1/piecesofnews/',
+            url: '/piecesofnews/',
 
             defaults: {
                 title: '',
