@@ -3,6 +3,10 @@ $icon-font-path: "../bower_components/sass-bootstrap/fonts/";
 @import 'sass-bootstrap/lib/bootstrap';
 
 /* doart3 css */
+#navbar-search-input-group {
+    width: 200px;
+}
+
 .home_search_button {
     height: 34px;
 }
