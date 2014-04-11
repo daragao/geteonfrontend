@@ -6,8 +6,10 @@ define([
     'backbone',
     'templates',
     'views/newsListItem',
-    'views/navbarGraph'
-    ], function ($, _, Backbone, JST, NewsListItemView, NavbarGraphView) {
+    'views/navbarGraph',
+    'collections/bookmarks'
+    ], function ($, _, Backbone, JST, NewsListItemView, NavbarGraphView,
+        BookmarksCollection) {
         'use strict';
 
         var NewslistView = Backbone.View.extend({
@@ -36,17 +38,43 @@ define([
                     this.sessionModel = options.sessionModel;
                 this.sessionModel.on('sessionRefresh', this.refreshSession, this);
 
-                _.bindAll(this, 'checkScroll');
-                $(window).scroll(this.checkScroll);
+                // bookmarks
+                this.bookmarksCollection = new BookmarksCollection();
+                this.bookmarksCollection.on('add', this.setBookmarks, this);
+                this.bookmarksCollection.on('change', this.setBookmarks, this);
+                this.bookmarksCollection.on('destroy', this.destroyBookmark, this);
+
+                //_.bindAll(this, 'checkScroll');
+                //$(window).scroll(this.checkScroll);
 
                 var self = this;
                 self.canFetch = true;
                 this.childViews = new Array();
             },
 
+            destroyBookmark : function(model,collection,options) {
+                var bot = $('#'+model.attributes.NewsItemId + ' .bookmark');
+                if(bot.length)
+                    bot.removeClass('btn-primary').removeClass('active');
+            },
+
+            setBookmarks : function(model,collection,options) {
+                var bot = $('#'+model.attributes.NewsItemId + ' .bookmark');
+                if(bot.length)
+                    bot.addClass('btn-primary').addClass('active');
+            },
+
+            fetchBookmarks : function (){
+                $('.bookmark').removeClass('btn-primary').removeClass('active');
+                this.bookmarksCollection.reset();
+                this.bookmarksCollection.fetch({data:{'bookmarkType':1}});
+            },
+
             refreshSession: function() {
                 var isLoggedIn = this.sessionModel.isLoggedIn();
                 $('.bookmark').toggle(isLoggedIn);
+                if(isLoggedIn)
+                    this.fetchBookmarks();
             },
 
             fetchCollection: function() {
@@ -75,9 +103,21 @@ define([
             },
 
             checkScroll: function () {
+                // get graph data
+                var oneDay = 24*60*60*1000;
+                var newsItemDate =
+                    new Date(this.collection.last().attributes.pubdate);
+                var navBarDate =
+                    new Date(this.navbarGrapView.collection.last().
+                            attributes.date);
+                var diffDays =
+                    (navBarDate.getTime() - newsItemDate.getTime())/(oneDay);
+                if(diffDays > 7){
+                    this.navbarGrapView.nextPage();
+                }
+                // get news list items
                 if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300)
                 {
-                    //this.navbarGrapView.nextPage();
                     this.nextPage();
                 }
             },
@@ -100,7 +140,9 @@ define([
                 //render newslistitem
                 var view = new NewsListItemView({
                     elemName: elemName,
-                    model: newsItem
+                    model: newsItem,
+                    sessionModel: this.sessionModel,
+                    bookmarksCollection: this.bookmarksCollection
                 });
                 this.childViews.push(view);
                 $('.bookmark').toggle(this.sessionModel.isLoggedIn());
@@ -122,6 +164,8 @@ define([
                 }
                 this.delegateEvents();
                 this.refreshSession();
+                _.bindAll(this, 'checkScroll');
+                $(window).scroll(this.checkScroll);
                 return this;
             },
 
@@ -131,6 +175,7 @@ define([
 
                 //COMPLETELY UNBIND THE VIEW
                 this.undelegateEvents();
+                $(window).unbind('scroll');
 
                 this.$el.removeData().unbind();
 

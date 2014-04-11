@@ -4,8 +4,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'templates'
-    ], function ($, _, Backbone, JST) {
+    'templates',
+    'models/bookmark'
+    ], function ($, _, Backbone, JST, BookmarkModel) {
         'use strict';
 
         var NewslistitemView = Backbone.View.extend({
@@ -19,7 +20,10 @@ define([
                 'click .bookmark':'bookmarkClicked'
             },
 
-            initialize: function () {
+            initialize: function (options) {
+                this.sessionModel = options.sessionModel;
+                this.bookmarksCollection = options.bookmarksCollection;
+                this.sessionModel.on('sessionRefresh', this.refreshSession, this);
                 this.listenTo(this.model, 'destroy', this.remove);
                 this.$el.attr('href','#article/'+this.model.id);
                 this.$el.attr('id',this.model.id);
@@ -31,16 +35,33 @@ define([
                 this.render();
             },
 
-            setUserFeatures: function(isLoggedIn) {
-                $('#' + this,model.id + '.bookmark').toggle(isLoggedIn);
+            isBookmarked: function () {
+                var bookmarkId = this.model.id;
+                var bookmark = this.bookmarksCollection.get(bookmarkId);
+                return bookmark;
             },
 
             bookmarkClicked: function(e) {
                 e.preventDefault();
+                var bookmarkId = this.model.id;
+                var bookmark = this.bookmarksCollection.get(bookmarkId);
+                if(!bookmark){
+                    bookmark = new BookmarkModel({
+                        'NewsItemId':this.model.id,
+                        'UserId':this.sessionModel.id,
+                        'BookmarkType':1
+                    });
+                    bookmark.save();
+                    this.bookmarksCollection.add(bookmark);
+                } else {
+                    bookmark.destroy();
+                }
             },
 
             render: function () {
                 $('#'+this.options.elemName).append(this.$el.html(this.template(this.model.toJSON())));
+                if(this.isBookmarked())
+                    $('#' + this.model.id + ' .bookmark').addClass('btn-primary').addClass('active');
                 this.delegateEvents();
                 return this;
             },

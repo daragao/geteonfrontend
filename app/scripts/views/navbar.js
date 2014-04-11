@@ -30,11 +30,22 @@ define([
                 'submit #navbar-logout-form':'logoutUser'
                 },
 
+                toggleLoginBox: function (shouldDisable) {
+                    $("#navbar-login-dropdown #username").
+                        prop('disabled',shouldDisable);
+                    $("#navbar-login-dropdown #password").
+                        prop('disabled',shouldDisable);
+                    $("#navbar-login-dropdown .btn").
+                        prop('disabled', shouldDisable);
+                },
+
                 logoutUser: function(e){
+                    this.toggleLoginBox(true);
                     this.sessionModel.logout();
                 },
 
                 loginUser: function(e){
+                    this.toggleLoginBox(true);
                     var username = $("#navbar-login-dropdown #username").val();
                     var password = $("#navbar-login-dropdown #password").val();
 
@@ -79,6 +90,7 @@ define([
                         username = this.sessionModel.get('Username');
                     }
                     $('#login-btn').text(username);
+                    this.toggleLoginBox(false);
                     this.$('li .dropdown-menu').toggle(false);
                 },
 

@@ -1,9 +1,26 @@
 define([
-    'jquery',
-    'underscore',
-    'backbone'
-    ], function ($, _, Backbone) {
-        _.extend(Backbone.View.prototype, {
+        'jquery',
+        'underscore',
+        'backbone'
+        ], function ($, _, Backbone) {
+            _.extend(Backbone.View.prototype, {
+
+                getScrollPosition: function(){
+                    var result = {};
+                    if(typeof pageYOffset!= 'undefined'){
+                        //most browsers
+                        result.left = pageXOffset;
+                        result.top = pageYOffset;
+                    }
+                    else{
+                        var B= document.body; //IE 'quirks'
+                        var D= document.documentElement; //IE with doctype
+                        D= (D.clientHeight)? D: B;
+                        result.left = D.scrollLeft;
+                        result.top = D.scrollTop;
+                    }
+            return result;
+                },
 
             date2urlDateStr: function(myDate) {
                 var dateStr = myDate.getFullYear() + "-" +
@@ -32,17 +49,17 @@ define([
 
             writeDate: function (mydate) {
                 var year=mydate.getFullYear()
-                var day=mydate.getDay()
-                var month=mydate.getMonth()
-                var daym=mydate.getDate()
-                //if the current date is less than 10, pad it.
-                if (daym<10)
-                    daym="0"+daym
-                var dayarray=new Array("Sunday","Monday","Tuesday","Wednesday",
-                "Thursday","Friday","Saturday");
+                    var day=mydate.getDay()
+                    var month=mydate.getMonth()
+                    var daym=mydate.getDate()
+                    //if the current date is less than 10, pad it.
+                    if (daym<10)
+                        daym="0"+daym
+                            var dayarray=new Array("Sunday","Monday","Tuesday","Wednesday",
+                                    "Thursday","Friday","Saturday");
                 var montharray=new Array("January","February","March","April",
-                    "May","June","July","August","September","October",
-                "November","December");
+                        "May","June","July","August","September","October",
+                        "November","December");
                 //write out the final results
                 return dayarray[day]+", "+montharray[month]+" "+daym+", "+year;
             },
@@ -64,5 +81,5 @@ define([
                 Backbone.View.prototype.remove.call(this);
 
             }
+            });
         });
-    });
