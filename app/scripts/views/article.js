@@ -4,8 +4,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'templates'
-    ], function ($, _, Backbone, JST) {
+    'templates',
+    'collections/articleNote'
+    ], function ($, _, Backbone, JST, NoteCollection) {
         'use strict';
 
         var ArticleView = Backbone.View.extend({
@@ -17,13 +18,17 @@ define([
             events: {
                 'shown.bs.tooltip #article-text': 'addTooltipHTML',
                 'hide.bs.tooltip #article-text': 'removeTagsFromPre',
-            'click #tooltip-note-add': 'addNote'
+            'click #tooltip-note-add': 'addNote',
+            'click #tooltip-note-save': 'saveNote'
             },
 
             initialize: function () {
+                //article
                 this.listenTo(this.model, 'add', this.render);
                 this.listenTo(this.model, 'change', this.render);
                 this.listenTo(this.model, 'destroy', this.remove);
+
+                this.notesCollection = new NoteCollection();
 
                 if(this.model){
                     this.model.fetch();
@@ -32,14 +37,28 @@ define([
                 $('body').bind('mousedown',{thisView : this}, this.mouseDownEvent);
             },
 
+            saveNote: function(ev) {
+                this.lastRange.NoteText = $('#tooltip-note-editor textarea').val();
+                this.lastRange.UserId = 0;
+                this.notesCollection.add(this.lastRange);
+                this.lastRange.save();
+            },
+
+
+            lastRange: {}, // not really nice to have a temporary global, but what I can do for now!
+
             addNote: function(ev) {
+                if($('#tooltip-note-editor').is(":visible") )
+                    return;
                 var highlight = document.createElement( 'span' );
                 highlight.className = 'selected-text';
                 var selection = this.getSelection();
                 var selectionRange = selection.getRangeAt(0);
+                this.lastRange = this.notesCollection.createModel(0,selectionRange,'');
                 selectionRange.surroundContents(highlight);
-                $('#note-tooltip-editor').show();
-                $('#note-tooltip-editor').focus();
+                $('#tooltip-note-editor').show();
+                $('#tooltip-note-add').addClass('disabled');
+                $('#tooltip-note-editor').focus();
                 var selection = this.getSelection();
                 this.setTooltipPosition(selection);
             },
@@ -91,7 +110,7 @@ define([
                         self.setTooltipPosition(selection);
                     }
                 } else {
-                    if(ev.toElement.parentNode.id !== "note-tooltip-editor")
+                    if(ev.toElement.parentNode.id !== "tooltip-note-editor")
                         elem.tooltip('hide');
                 }
             },

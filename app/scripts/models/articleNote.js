@@ -9,13 +9,11 @@ define([
     var ArticlenoteModel = Backbone.Model.extend({
         defaults: {
             'ElementId': '',
-        'StartPos':0,
-        'EndPos':0,
-        'noteText':''
+        'StartOffset':0,
+        'EndOffset':0,
+        'NoteText':'',
+        'UserId':0
         }
-                  //range document.getElementById('article-text').firstChild
-                  //range document.createRange()
-                  //range range.setStart(document.getElementById('article-text').firstChild,4)
     });
 
     return ArticlenoteModel;

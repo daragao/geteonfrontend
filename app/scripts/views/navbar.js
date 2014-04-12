@@ -62,7 +62,7 @@ define([
                 },
 
                 submitSearch: function() {
-                    //$('#search_input').val();
+                    $('#search_input').val();
                     var searchParams = $(event.target).serialize();
                     Backbone.history.navigate('newsList?'+searchParams, true);
                 },
