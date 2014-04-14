@@ -62,7 +62,7 @@ require([
         'views/viewsHelper' // doesn't need to be added as an argument
         ], function ($, Backbone, ApplicationRouter) {
 
-            $.ajaxPrefilter("json script", function (options, originalOptions, jqXHR) {
+            $.ajaxPrefilter('json script', function (options/*, originalOptions, jqXHR*/) {
                 // GETEON BACKEND
                 //var urlBaseGeteonBackend = 'http://geteon-backend-php.herokuapp.com/v1'; //remote
                 //var urlBaseGeteonBackend = 'http://api.geteon.com/v1'; //remote
@@ -78,11 +78,11 @@ require([
             // Your server goes below
             options.crossDomain = true;
             if(options.url &&
-                (keywordIndex == -1 && fullAddressIndex == -1)) {
+                (keywordIndex === -1 && fullAddressIndex === -1)) {
                     options.xhrFields = {withCredentials:false};
                     options.url = urlBaseGeteonBackend + options.url;
                 } else {
-                    if(keywordIndex != -1){
+                    if(keywordIndex !== -1){
                         var endIndex = keywordIndex + backendKeyword.length;
                         options.url = urlBaseGoBackend + options.url.substring(endIndex);
                     }
@@ -90,6 +90,6 @@ require([
 
             });
 
-            var routerApp = new ApplicationRouter();
+            /*var routerApp = */new ApplicationRouter();
             Backbone.history.start();
         });
