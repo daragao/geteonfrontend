@@ -101,7 +101,6 @@ define([
             mouseUpEvent: function(ev) {
                 var self = ev.data.thisView;
                 var selection = self.getSelection();
-                var range = selection.getRangeAt(0);
                 var elem = $('#article-text');
                 if (selection && !selection.isCollapsed) {
                     if(!$('.tooltip-inner').length){

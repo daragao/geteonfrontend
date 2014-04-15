@@ -1,10 +1,42 @@
-<h2><%- title %></h2>
-<h4>
-    <small><%- prettydate %></small>
-    <span class="pull-right">
-        <a class="btn btn-default btn-xs" role="button" target="_blank" href="<%- link %>">
-            <%- mainsourcename %>
-        </a>
-    </span>
-</h4>
-<pre id="article-text" data-toggle="tooltip" data-trigger="" data-title="<%- title %>"><%- piecenews %></pre>
+<div class="row">
+
+
+<div class="col-md-3">
+    <div class="sidebar-nav">
+        <div class="navbar navbar-default" role="navigation">
+            <div class="navbar-collapse collapse sidebar-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Menu Item 1</a></li>
+                    <li><a href="#">Menu Item 2</a></li>
+                    <li><a href="#">Menu Item 3</a></li>
+                    <li><a href="#">Menu Item 4</a></li>
+                    <li><a href="#">Reviews <span class="badge">1,118</span></a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+<div class="col-md-9">
+    <h2><%- title %></h2>
+    <h4>
+        <small><%- prettydate %></small>
+        <span class="pull-right">
+            <a class="btn btn-default btn-xs" role="button" target="_blank" href="<%- link %>">
+                <%- mainsourcename %>
+            </a>
+        </span>
+    </h4>
+
+
+
+
+
+<pre id="article-text" data-toggle="tooltip" data-trigger="" 
+data-title="<%- title %>" >
+<%- piecenews %>
+</pre>
+
+
+</div>
+</div>
